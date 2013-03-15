@@ -21,4 +21,4 @@ Other stuff
 ===
 I had fun writing this challenge. It was more theoretical than anything I've come across in any of my day-to-day work and I learned a lot while I was writing it (particularly in reference to the knapsack problem, integer partitioning and np complete problems).
 
-Thanks for taking the time to look it over, and I hope to talk to you soon.
+Thanks for taking the time to look it over. Comments are always welcome.
