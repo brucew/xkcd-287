@@ -1,0 +1,6 @@
+$13.00
+walnut,$17.00
+acorn,$5.00
+cashew,$2.00
+peanut,$12.00
+almond,$9.00
