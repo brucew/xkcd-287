@@ -1,6 +1,6 @@
 About
 ===
-I came pretty close solving this one, but did not quite make it to the end. In the name of submitting it in a timely manner, I am sending it in its [nearly complete] state.
+I came pretty close solving this one. It works on most use cases.
 
 The Menu#get_combo method uses brute force to determine if there is a solution to the menu / budget constraint. It will solve the problem if:
 
@@ -8,6 +8,8 @@ The Menu#get_combo method uses brute force to determine if there is a solution t
 2. The solution can be reached through combination of items
 
 This works most of the time but will not work if the solution to the menu requires uses _both_ repetition and combination.
+
+*How could I optimize this, you ask?* I could use a brute force combination checker that multiplies every item on the menu by an arbitrary value. This would take more processor power, but would allow for more solutions via combination.
 
 How to run the script
 ===

@@ -4,7 +4,7 @@ class Menu
   attr_accessor :items
   attr_reader   :combinations
   def initialize(csv_file = nil)
-    @target_price = 0 
+    @target_price = 0
     @items        = []
     self.populate_data!(csv_file) if csv_file
   end

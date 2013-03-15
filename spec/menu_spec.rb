@@ -17,6 +17,7 @@ end
 
 describe Menu, '#get_combos' do
   before do
+    #OPTIMIZE: Use let statements.
     @possible_menuitem      = Menu.new("spec/possible.txt")
     @impossible_menuitem    = Menu.new("spec/impossible.txt")
     @possible_combinations   = @possible_menuitem.combinations
