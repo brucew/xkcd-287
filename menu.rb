@@ -26,16 +26,16 @@ class Menu
     return self
   end
 
-  # Finds all item combinations that add up to a specific price exactly
-  def find_combinations_to_price(items, target_price)
+  # Recursive method to find all item combinations that add up to a specific price exactly
+  def recursive_combinations_to_price(items, target_price)
     combinations = []
     items.each do |item|
       case
         when item[:price] < target_price
-          new_combinations = find_combinations_to_price(items, target_price - item[:price])
+          new_combinations = recursive_combinations_to_price(items, target_price - item[:price])
           # We need to add our current item to each of the combinations
           # and simultaneously sort the combination so that we can remove duplicates
-          new_combinations.collect {|combo| (combo << item).sort_by! {|obj| obj.object_id } }
+          new_combinations.collect { |combo| (combo << item).sort_by! { |obj| obj.object_id } }
           combinations += new_combinations
         when item[:price] == target_price
           combinations << [item]
@@ -44,31 +44,31 @@ class Menu
     return combinations.uniq # Here is where we remove duplicates
   end
 
-  def get_combos
-    @combinations = find_combinations_to_price(@items, @target_price)
+  # Brute force method to find all item combinations that add up to a specific price exactly
+  # This method is both faster and easier to understand than the recursive method
+  def brute_force_combinations_to_price(items, target_price)
+    combinations = []
+    cheapest_item = items.min_by { |item| item[:price] }
+    max_combination_length = target_price.div(cheapest_item[:price])
 
-    #@combinations = []
+    # Generate all possible combinations of items of any length that could add up to the target price
+    (1..max_combination_length).each do |combination_length|
+      items.repeated_combination(combination_length).each do |combination|
+        # Add combination to the results if the sum of its item prices equals the target price
+        combinations << combination if combination.inject(0) { |sum, item| sum + item[:price] } == target_price
+      end
+    end
 
-    ##First round of guessing: Make combinations
-    ##BETER IDEA: make each possible combo an array of 6 duplicate menu items so that more combinations are possible.
-    ##More resource intensive but more accurate
-    #(1...(@items.count)).each do |count|
-    #    @items.combination(count).to_a.each do |combo_nominee|
-    #      @combinations << combo_nominee if combo_nominee.map{|x| x[:price]}.inject(:+) == @target_price
-    #    end
-    #end
-    #
-    ##second round of guessing: add multiples together until they == @target price
-    #(0...(@items.count)).each do |item_index|
-    #  if (@target_price % @items[item_index][:price]) == 0
-    #    quatity = 0
-    #    until ( @items[item_index][:price] * quatity ) == @target_price
-    #      quatity = quatity + 1
-    #    end
-    #    @combinations << [@items[item_index]]*quatity
-    #  end
-    #end
+    return combinations
+  end
 
+  def get_combos(opts={})
+    case opts[:method]
+      when :recursive
+        @combinations = recursive_combinations_to_price(@items, @target_price)
+      else
+        @combinations = brute_force_combinations_to_price(@items, @target_price)
+    end
   end
 
   def show_results
