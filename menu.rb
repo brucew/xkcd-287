@@ -26,22 +26,22 @@ class Menu
     return self
   end
 
+  # Finds all item combinations that add up to a specific price exactly
   def find_combinations_to_price(items, target_price)
     combinations = []
     items.each do |item|
       case
         when item[:price] < target_price
-          combinations += find_combinations_to_price(items, target_price - item[:price]).collect {|combo| increment_item_count(item[:name], combo) }
+          new_combinations = find_combinations_to_price(items, target_price - item[:price])
+          # We need to add our current item to each of the combinations
+          # and simultaneously sort the combination so that we can remove duplicates
+          new_combinations.collect {|combo| (combo << item).sort_by! {|obj| obj.object_id } }
+          combinations += new_combinations
         when item[:price] == target_price
-          combinations << {item[:name] => 1}
+          combinations << [item]
       end
     end
-    return combinations
-  end
-
-  def increment_item_count(item_name, combination)
-    combination[item_name] = combination[item_name].nil? ? 1 : combination[item_name] + 1
-    return combination
+    return combinations.uniq # Here is where we remove duplicates
   end
 
   def get_combos
@@ -72,7 +72,6 @@ class Menu
   end
 
   def show_results
-    binding.pry
     results = ""
     if (@combinations != [])
       results << "Greetings. Here are your #{@combinations.count} winning menu combinations\n"
